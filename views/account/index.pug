@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Welcome to the Wonderland Widescreen
+    style.
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: url('https://i.pinimg.com/736x/4c/da/0e/4cda0e64d5ae15cf8687a77f669e2da6.jpg') no-repeat center center fixed;
+        background-size: cover;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      h1 {
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        font-size: 2.5em;
+        text-align: center;
+      }
+      .login-buttons {
+        margin-top: 20px;
+      }
+      .btn {
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(0,0,0,0.7);
+        color: white;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: rgba(0,0,0,0.9);
+      }
+  body
+    h1 Welcome to the Wonderland Widescreen
+    .login-buttons
+      button.btn(onclick="location.href='/users/adminLogin'") Admin Login
+      button.btn(onclick="location.href='/users/guestlogin'") Guest Login
+
