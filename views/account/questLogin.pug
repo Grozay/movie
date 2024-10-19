@@ -9,7 +9,7 @@ html
     .bg-gradient-to-t.from-pink-300.to-yellow-600.flex.items-center.justify-center.min-h-screen
       .bg-pink-500.p-8.rounded-lg.shadow-lg.w-80
         h2.text-2xl.font-bold.mb-6.text-center.text-gray-800 Quest Login
-        form
+        form(action='/users/userLogin' method='post')
           .mb-4
             label.block.text-sm.font-medium.text-gray-700.mb-1(for='username') Username:
             input#username.bg-pink-500.w-full.px-3.py-2.border-t-0.border-l-0.border-r-0.border-b-2.border-b-white(type='text' name='username' class='focus:outline-none focus:ring-0 focus:border-b-white')
