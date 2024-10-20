@@ -9,6 +9,13 @@ const { body, validationResult } = require('express-validator');
 // exports.adminLogin = (req, res) => {
 //     res.render('account/adminLogin');
 // };
+exports.index = (req, res) => {
+    res.render('account/index');
+};
+
+exports.register = (req, res) => {
+    res.render('account/register');
+};
 
 exports.guestLogin = (req, res) => {
     res.render('account/questLogin');
@@ -17,7 +24,6 @@ exports.guestLogin = (req, res) => {
 exports.userLogin = [
     body('username').notEmpty().withMessage('Username is required'),
     body('password').notEmpty().withMessage('Password is required'),
-
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -25,11 +31,9 @@ exports.userLogin = [
                 errors: errors.array(),
                 username: req.body.username
             });
-        }
-
+          
         try {
-            const { username, password } = req.body;
-            const user = await User.findOne({ username });
+            const user = await User.findOne({ username: req.body.username });
             if (!user) {
                 return res.render('account/questLogin', {
                     errors: [{ msg: 'Invalid username or password1' }],
@@ -53,17 +57,23 @@ exports.userLogin = [
                 username: req.body.username
             });
         }
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        
+        if(decodedToken.role !== 'admin'){
+            res.cookie('token', token); 
+            res.redirect('/users/guestlogin');
+        }else{
+            res.cookie('token', token);
+            res.redirect('/');
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 ];
 
 
-exports.index = (req, res) => {
-    res.render('account/index');
-};
-
-exports.register = (req, res) => {
-    res.render('account/register');
-};
 
 exports.createRegister = [
     body('username')
