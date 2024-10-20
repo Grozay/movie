@@ -1,4 +1,3 @@
-
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -31,25 +30,35 @@ exports.userLogin = [
                 errors: errors.array(),
                 username: req.body.username
             });
+        }
           
         try {
-            const user = await User.findOne({ username: req.body.username });
+            const { username, password } = req.body;
+            const user = await User.findOne({ username });
             if (!user) {
                 return res.render('account/questLogin', {
-                    errors: [{ msg: 'Invalid username or password1' }],
-                    username: req.body.username
+                    errors: [{ msg: 'Invalid username or password' }],
+                    username: username
                 });
             }
 
             const passwordMatch = await bcrypt.compare(password, user.password);
             if (!passwordMatch) {
                 return res.render('account/questLogin', {
-                    errors: [{ msg: 'Invalid username or password2' }],
-                    username: req.body.username
+                    errors: [{ msg: 'Invalid username or password' }],
+                    username: username
                 });
             }
 
-            res.redirect('/');
+            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            res.cookie('token', token);
+            const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+
+            if (decodedToken.role === 'admin') {
+                res.redirect('/users/guestlogin');
+            } else {
+                res.redirect('/');
+            }
         } catch (error) {
             console.error(error);
             return res.render('account/questLogin', {
@@ -57,19 +66,6 @@ exports.userLogin = [
                 username: req.body.username
             });
         }
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        
-        if(decodedToken.role !== 'admin'){
-            res.cookie('token', token); 
-            res.redirect('/users/guestlogin');
-        }else{
-            res.cookie('token', token);
-            res.redirect('/');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
     }
 ];
 
