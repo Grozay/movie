@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const usersController = require('../controllers/usersController');
-
-// router.get('/admin-login', usersController.adminLogin);
+const authController = require('../controllers/authController');
+router.get('/adminLogin', authController.adminLogin);
 router.get('/guestlogin', usersController.guestLogin);
 router.get('/register', usersController.register);
 router.post('/userLogin', usersController.userLogin);

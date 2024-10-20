@@ -1,6 +1,14 @@
-var express = require('express');
-var router = express.Router();
-const usersController = require('../controllers/usersController');
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
 
-/* GET users listing. */
-router.get('/adminlogin', usersController.adminLogin);
+// Route hiển thị trang đăng nhập
+router.get('/adminLogin', authController.adminLogin);
+
+// Route xử lý đăng nhập
+router.post('/adminLogin', authController.handleLogin);
+
+// Route bảo vệ
+router.get('/protectedRoute', authController.protectedRoute);
+
+module.exports = router;

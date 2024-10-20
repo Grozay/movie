@@ -1,0 +1,51 @@
+doctype html
+html
+  head
+    title Welcome!
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css")
+    link(rel="stylesheet" href="/stylesheets/style.css")
+    style.
+      body {
+        background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .container {
+        margin-top: 100px;
+      }
+      .welcome-box {
+        background-color: white;
+        padding: 50px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      .welcome-message {
+        font-size: 2.5rem;
+        color: #333;
+      }
+      .username {
+        font-weight: bold;
+        color: #fda085;
+      }
+      .btn {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1.2rem;
+        background-color: #fda085;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+      }
+      .btn:hover {
+        background-color: #f6d365;
+      }
+  body
+    .container
+      .row
+        .col-md-6.offset-md-3
+          .welcome-box.text-center
+            h1.welcome-message Chào mừng, #[span.username #{username}]!
+            p Bạn đã đăng nhập thành công.
+            a.btn(href='/users') Đăng xuất
