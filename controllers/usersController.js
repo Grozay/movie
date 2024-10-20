@@ -6,13 +6,19 @@ const jwt = require('jsonwebtoken');
 // exports.adminLogin = (req, res) => {
 //     res.render('account/adminLogin');
 // };
+exports.index = (req, res) => {
+    res.render('account/index');
+};
+
+exports.register = (req, res) => {
+    res.render('account/register');
+};
 
 exports.guestLogin = (req, res) => {
     res.render('account/questLogin');
 };
 
 exports.userLogin = async (req, res) => {
-    console.log(req.body);
     try {
         const user = await User.findOne({ username: req.body.username });
         if (!user) {
@@ -22,19 +28,22 @@ exports.userLogin = async (req, res) => {
         if (!passwordMatch) {
             throw new Error('Invalid username or password');
         }
-        res.redirect('/');
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        
+        if(decodedToken.role !== 'admin'){
+            res.cookie('token', token); 
+            res.redirect('/users/guestlogin');
+        }else{
+            res.cookie('token', token);
+            res.redirect('/');
+        }
     } catch (error) {
         console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
-exports.index = (req, res) => {
-    res.render('account/index');
-};
-
-exports.register = (req, res) => {
-    res.render('account/register');
-};
 
 exports.createRegister = async (req, res) => {
     try {
