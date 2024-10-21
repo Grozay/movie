@@ -27,5 +27,7 @@ html
               .text-gray-500.mt-2= errors.find(error => error.path === 'password').msg
             if errors && errors.some(error => error.msg === 'Invalid username or password')
               .text-gray-500.mt-2= errors.find(error => error.msg === 'Invalid username or password').msg
+            if errors && errors.some(error => error.msg === 'You do not have permission')
+              .text-gray-500.mt-2= errors.find(error => error.msg === 'You do not have permission').msg
           button.mt-4.shadow-2xl.w-2xl.bg-purple-800.text-white.py-2.px-4.rounded-md.shadow-lg(type='submit' class='hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 shadow-pink-500/50') LOGIN
           a.pl-9.text-gray-700(href='/users/register') Register

@@ -12,6 +12,25 @@ exports.index = (req, res) => {
     res.render('account/index');
 };
 
+
+exports.homeUser = (req, res) => {
+    if (!req.cookies.token) {
+        return res.render('account/homeUser', { isLoggedIn: false });
+    }
+    try {
+        const decodedToken = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+        if (decodedToken.role === 'user') {
+            res.render('account/homeUser', { isLoggedIn: true }); 
+        } else {
+            res.render('account/homeUser', { isLoggedIn: false });
+        }
+    } catch (error) {
+        console.error('JWT verification failed', error);
+        res.render('account/homeUser', { isLoggedIn: false });
+    }
+};
+
+
 exports.register = (req, res) => {
     res.render('account/register');
 };
@@ -51,7 +70,7 @@ exports.userLogin = [
                 });
             }
 
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '24h' });
             res.cookie('token', token);
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -61,7 +80,7 @@ exports.userLogin = [
                     username: username
                 });
             } else {
-                res.redirect('/');
+                res.redirect('/users/homeUser'); 
             }
         } catch (error) {
             console.error(error);
@@ -108,4 +127,9 @@ exports.createRegister = [
         }
     }
 ];
+
+exports.logoutUser = (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/users/guestlogin');
+};
 
